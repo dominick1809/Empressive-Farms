@@ -8,8 +8,13 @@ class Product {
     // Class constructor
     public Product(){}
 
-    public boolean isAvailable(){
-        return true;
+    public boolean isAvailable(quantity_r){
+        if (quantity ==0 and quantity_r >= quantity){
+            return true;
+        }
+        else{
+            system.out.println("Quantity requested cannot be fulfilled")
+        }
     }
 
     public void updateProduct(){}
