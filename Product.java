@@ -29,7 +29,7 @@ class Product {
     }
 
     public String toString(){
-        pinfo= (
-        return name + unit price;
+        String pinfo= (String.ValueOf(id)+" " +name + " " +quantity " "+unit_price)
+        return pinfo;
     }
 }
