@@ -10,11 +10,11 @@ class Product {
     public Product(){}
 
     public boolean isAvailable(quantity_r){
-        if (quantity ==0 and quantity_r <= quantity){
-            return true;
+        if (quantity ==0 ){
+            return false;
         }
-        else{
-            system.out.println("Quantity requested cannot be fulfilled")
+        else if (quantity_r <= quantity){
+            return true;
         }
     }
     public int getId()
