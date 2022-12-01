@@ -3,23 +3,25 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Scanner;
 
 class Order {
     private int orderID;
-    private ArrayList<Product> products;
+    private Product product;
     private String paymentType;
-    //private Date pd_Date;
+    private GregorianCalendar pd_Date;
     private boolean status = false;
     private int cID;                    // to identify the customer
     private static ArrayList<Order> olist;
 
     // Class constructors
-    public Order(String ptype, int cID, ArrayList<Product> products){
-        this.products = products;
+    public Order(String ptype, int cID, Product product){
+        this.product = product;
         paymentType = ptype;
         this.cID = cID;
-        //pd_Date = Date.l; //
+        pd_Date = new GregorianCalendar(); //initializing the variable
+        //pd_Date.add(, 14);                what is field value for day
         if(olist.size() == 0){
             fetch_data();
         }
@@ -40,8 +42,12 @@ class Order {
         return orderID;
     }
 
-    public ArrayList<Product> getProducts(){
-        return products;
+    public Product getProducts(){
+        return product;
+    }
+
+    public static ArrayList<Order> getOrders(){
+        return olist;
     }
 
     public boolean isFulfilled(){
@@ -51,6 +57,14 @@ class Order {
     public void fulfillOrder(){
         status = true;
     }
+
+    /*public void removeProduct(int prodID){
+        for(Product p : product){
+            if(prodID == p.getID()){
+                p = null;
+            }
+        }
+    }*/
 
     public void updateOrder(Order o){
         for(Order o1: olist){
@@ -79,17 +93,14 @@ class Order {
             Scanner scan = new Scanner(new File("Order.dat"));
             while(scan.hasNext()){
                 String[] o = scan.nextLine().split(" ");
-                Order o1 = new Order(Integer.valueOf(o[0]),o[1],Integer.valueOf(o[2]), Boolean.valueOf(o[3]));
-                for(int i = 0; i+4<o.length; i+=5){
-                    Product p1 = new Product(o[1], Float.valueOf(o[2]), Float.valueOf(o[3]),o[4],o[5]);
-                    products.add(p1);
-                }
+                Order o1 = new Order(Integer.valueOf(o[0]) ,o[1],Integer.valueOf(o[2]), Boolean.valueOf(o[3]));
+                o1.product = new Product(o[4], Float.valueOf(o[5]), Float.valueOf(o[6]),o[7],o[8]);
                 olist.add(o1);
             }
         }catch(FileNotFoundException fe){}
     }
 
-    public void saveData(){
+    public static void saveData(){
         try{
             PrintWriter pen = new PrintWriter("Order.dat");
             for(Order o : olist){

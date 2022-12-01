@@ -60,6 +60,17 @@ class Product {
         return type;
     }
 
+    public void setQty(float num){
+        quantity = num;
+    }
+    public void setPrice(float num){
+        unit_price = num;
+    }
+    
+    public static ArrayList<Product> getProducts(){
+        return plist;
+    }
+
     public boolean isAvailable(){
         return quantity != 0;
     }
@@ -96,7 +107,7 @@ class Product {
         }catch(FileNotFoundException fe){}
     }
 
-    public void saveData(){
+    public static void saveData(){
         try{
             PrintWriter pen = new PrintWriter("Product.dat");
             for(Product p : plist){

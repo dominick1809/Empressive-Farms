@@ -30,6 +30,10 @@ class Customer{
         this.password = password;
     }
 
+    public int getID(){
+        return ID;
+    }
+
     public String getName(){
         return name;
     }
@@ -86,7 +90,7 @@ class Customer{
         }catch(FileNotFoundException fe){}
     }
 
-    public void saveData(){
+    public static void saveData(){
         try{
             PrintWriter pen = new PrintWriter("Customer.dat");
             for(Customer c : clist){

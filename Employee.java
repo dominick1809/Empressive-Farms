@@ -63,7 +63,7 @@ class Employee {
         }catch(FileNotFoundException fe){}
     }
 
-    public void saveData(){
+    public static void saveData(){
         try{
             PrintWriter pen = new PrintWriter("Employee.dat");
             for(Employee e : elist){

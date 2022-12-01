@@ -51,7 +51,7 @@ public class Employee_Login extends JPanel {
         frame.setVisible(true);
     }
 
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 createGUI();
@@ -66,22 +66,20 @@ public class Employee_Login extends JPanel {
         Employee_Login pane = new Employee_Login();
         pane.setOpaque(true);
         frame.setContentPane(pane);
-    }   
+    }   */
 
     private class EmployeeLogin implements ActionListener { 
         @Override
         public void actionPerformed(ActionEvent e) {
             String employeee = employeeUserName.getText();
-            String passwrd = employeePassword.getText();
+            String passwrd = String.valueOf(employeePassword.getPassword());
 
             if (employeee.equals("employee") && passwrd.equals("P@ssword1")) {
                 resultMessage.setText("Login was Successful!");
-                new employee_screen();
+                new Employee_Screen();
             } else {
                 resultMessage.setText("Incorrect User Name or Password was entered!");
             }
         }
     }
 }
-
-

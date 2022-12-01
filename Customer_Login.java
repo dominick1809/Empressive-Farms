@@ -2,7 +2,7 @@ import javax.swing.*;
 import java.awt.event.*; 
 import java.awt.Color;
 
-public class Customer_Login extends JPanel {
+public class Customer_Login extends JFrame {
     private static JLabel customer;
     private static JLabel password;
     private static JLabel resultMessage;
@@ -12,12 +12,12 @@ public class Customer_Login extends JPanel {
 
     public Customer_Login() {
         JPanel panel = new JPanel();
-        JFrame frame = new JFrame();
+        //JFrame frame = new JFrame();
 
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(340, 200);
-        frame.setTitle("Customer Login");
-        frame.add(panel);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setSize(340, 200);
+        this.setTitle("Customer Login");
+        this.add(panel);
 
         customer = new JLabel("Customer User Name:");
         customer.setBounds(10, 20, 170, 25);
@@ -49,10 +49,10 @@ public class Customer_Login extends JPanel {
         panel.add(resultMessage);
         panel.setLayout(null);
         
-        frame.setVisible(true);
+        this.setVisible(true);
     }
 
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 createGUI();
@@ -67,22 +67,22 @@ public class Customer_Login extends JPanel {
         Customer_Login pane = new Customer_Login();
         pane.setOpaque(true);
         frame.setContentPane(pane);
-    }   
+    }*/
 
     private class CustomerLogin implements ActionListener { 
         @Override
         public void actionPerformed(ActionEvent e) {
             String customerr = customerUserName.getText();
-            String passwrd = customerPassword.getText();
+            String passwrd = String.valueOf(customerPassword.getPassword());
 
             if (customerr.equals("customer") && passwrd.equals("pAs$worD2")) {
+                // create with new frame where customer screen is the content pane
                 resultMessage.setText("Login was Successful!");
-                new customer_screen();
+                new Customer_Screen(customerr);
             } else {
                 resultMessage.setText("Incorrect User Name or Password was entered!");
             }
         }
     }
 }
-
 

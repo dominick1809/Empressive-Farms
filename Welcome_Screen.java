@@ -8,10 +8,11 @@ public class Welcome_Screen extends JPanel {
     private static JLabel label;
 	private static JButton employee;
 	private static JButton customer;
+    private JFrame frame;
 	
     public Welcome_Screen() {
         JPanel panel = new JPanel();
-		JFrame frame = new JFrame("Welcome Screen"); 
+		frame = new JFrame("Welcome Screen"); 
 
 		frame.setSize(550,430);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -66,8 +67,9 @@ public class Welcome_Screen extends JPanel {
 
 	private class Employee implements ActionListener {
         @Override
-        public void actionPerformed(ActionEvent e) {  
+        public void actionPerformed(ActionEvent e) { 
             new Employee_Login();
+            frame.dispose();
         } 
 	}
 
@@ -75,6 +77,7 @@ public class Welcome_Screen extends JPanel {
         @Override
         public void actionPerformed(ActionEvent e) {  
             new Customer_Login();
+            frame.dispose();
         } 
     }
 }
