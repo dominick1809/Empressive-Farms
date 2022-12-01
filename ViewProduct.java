@@ -75,24 +75,32 @@ public class ViewProduct extends JFrame {
             pID = prodID;
             thisframe = this;
             pane = new JPanel();
+            JPanel qPanel = new JPanel();
+            JPanel pPanel = new JPanel();
+            JPanel bPanel = new JPanel();
 
             // components to enter new quantity for product
             qtyPrompt = new JLabel("Enter new quantity: ");
             qtytext	= new JTextField();
-            pane.add(qtyPrompt);
-            pane.add(qtytext);
+            qPanel.add(qtyPrompt);
+            qPanel.add(qtytext);
 
             // components to enter new price
             pricePrompt = new JLabel("Enter new price: ");
             pricetext = new JTextField();
-            pane.add(pricePrompt);
-            pane.add(pricetext);
+            pPanel.add(pricePrompt);
+            pPanel.add(pricetext);
 
             // button to indicate fields are filled
             saveButton = new JButton("Save Changes");
             saveButton.addActionListener(new productListener());
-            pane.add(saveButton);
+            bPanel.add(saveButton);
 
+            pane.add(qPanel);
+            pane.add(pPanel);
+            pane.add(bPanel);
+
+            this.add(pane);
             this.pack();
             this.setVisible(true);
         }

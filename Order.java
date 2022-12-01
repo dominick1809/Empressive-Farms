@@ -2,8 +2,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Calendar;   
 import java.util.Scanner;
 
 class Order {
@@ -20,8 +20,8 @@ class Order {
         this.product = product;
         paymentType = ptype;
         this.cID = cID;
-        pd_Date = new GregorianCalendar(); //initializing the variable
-        //pd_Date.add(, 14);                what is field value for day
+        pd_Date = new GregorianCalendar();                              //initializing the variable, done with current date and time
+        pd_Date.add(GregorianCalendar.DAY_OF_MONTH,14);         //two weeks after current date order should be ready
         if(olist.size() == 0){
             fetch_data();
         }
@@ -31,10 +31,9 @@ class Order {
 
     // Constructor to be used by fetch data
     private Order(int ID, String ptype, int cID, boolean status){
-        orderID = ID;
         paymentType = ptype;
         this.cID = cID;
-        //this.pd_Date = pd_Date;
+        //pd_Date = date;
         this.status = status;
     }
 
@@ -58,14 +57,6 @@ class Order {
         status = true;
     }
 
-    /*public void removeProduct(int prodID){
-        for(Product p : product){
-            if(prodID == p.getID()){
-                p = null;
-            }
-        }
-    }*/
-
     public void updateOrder(Order o){
         for(Order o1: olist){
             if(o1.getID() == o.getID()){
@@ -84,8 +75,8 @@ class Order {
     }
     
     public String toString(){
-        String str = String.valueOf(orderID) + " " + paymentType + " " + String.valueOf(cID) + " " + String.valueOf(status);
-        return str;
+        String str = String.valueOf(orderID) + " " + paymentType + " " + String.valueOf(cID) + " " + String.valueOf(status) + " " + product.toString();
+        return str + " " + String.valueOf(pd_Date.get(Calendar.YEAR)) + " " + pd_Date.get(Calendar.MONTH) + " " + pd_Date.get(Calendar.DATE);
     }
 
     private void fetch_data(){
@@ -95,6 +86,7 @@ class Order {
                 String[] o = scan.nextLine().split(" ");
                 Order o1 = new Order(Integer.valueOf(o[0]) ,o[1],Integer.valueOf(o[2]), Boolean.valueOf(o[3]));
                 o1.product = new Product(o[4], Float.valueOf(o[5]), Float.valueOf(o[6]),o[7],o[8]);
+                pd_Date = new GregorianCalendar(Integer.valueOf(o[9]),Integer.valueOf(o[10]),Integer.valueOf(o[11]));
                 olist.add(o1);
             }
         }catch(FileNotFoundException fe){}

@@ -1,5 +1,4 @@
 import java.awt.Color;
-import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -68,6 +67,7 @@ public class Employee_Screen
 		frame.getContentPane().add(updateButton); //then adds it to the frame
         updateButton.setBackground(Color.MAGENTA); //changes the color of the button
 		*/
+
 		// Button to view orders		
 		JButton viewButton = new JButton("VIEW PENDING ORDERS"); //this is the third button in the gui
 		viewButton.addActionListener(new ActionListener() 
@@ -136,45 +136,59 @@ public class Employee_Screen
         public addNewProducts(){
             thisframe = this;
             pane = new JPanel();
+            JPanel npanel = new JPanel();
+            JPanel ppanel = new JPanel();
+            JPanel qpanel = new JPanel();
+            JPanel cpanel = new JPanel();
+            JPanel tpanel = new JPanel();
+            JPanel bpanel = new JPanel();
 
             // product name 
             namelbl = new JLabel("Product Name");
             namelbl.setBounds(277, 107, 100, 16);
-            pane.add(namelbl);
+            npanel.add(namelbl);
             nametext = new JTextField();
-            pane.add(nametext);
+            npanel.add(nametext);
 
             // product price
             pricelbl = new JLabel("Product Unit Price");
             pricelbl.setBounds(277, 107, 100, 16);
-            pane.add(pricelbl);
+            ppanel.add(pricelbl);
             pricetext = new JTextField();
-            pane.add(pricetext);
+            ppanel.add(pricetext);
 
             // product quantity
             qtylbl = new JLabel("Product Quantity");
             qtylbl.setBounds(277, 107, 100, 16);
-            pane.add(qtylbl);
+            qpanel.add(qtylbl);
             qtytext = new JTextField();
-            pane.add(qtytext);
+            qpanel.add(qtytext);
 
             // product category
             catlbl = new JLabel("Product Category");
             catlbl.setBounds(277, 107, 100, 16);
-            pane.add(catlbl);
+            cpanel.add(catlbl);
             catText = new JTextField();
-            pane.add(catText);
+            cpanel.add(catText);
 
             // product type
             typelbl = new JLabel("Product Type");
             typelbl.setBounds(277, 107, 100, 16);
-            pane.add(typelbl);
+            tpanel.add(typelbl);
             typetext = new JTextField();
-            pane.add(typetext);
+            tpanel.add(typetext);
 
             // Button to indicate textfields are filled
             addProd = new JButton("Add New Product");
             addProd.addActionListener(new addProdListener());
+            bpanel.add(addProd);
+
+            pane.add(npanel);
+            pane.add(ppanel);
+            pane.add(qpanel);
+            pane.add(cpanel);
+            pane.add(tpanel);
+            pane.add(bpanel);
 
             this.add(pane);
             this.pack();

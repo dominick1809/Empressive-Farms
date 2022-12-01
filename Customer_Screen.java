@@ -59,8 +59,8 @@ public class Customer_Screen extends JFrame{
 
     private class viewOrdersListener implements ActionListener{
         public void actionPerformed(ActionEvent e){
-            //c new View_Orders(cname);
-            //frame.dispose;
+            new View_Orders(cname);
+            frame.dispose();
         }
     }
 

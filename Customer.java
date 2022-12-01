@@ -57,10 +57,9 @@ class Customer{
 
     public void placeOrder(Order O1){
         orders.add(O1);
-        for(Product p : O1.getProducts()){
-            Product pr = Product.findProduct(p.getID());
-            p.updateProduct(new Product(p.getName(), p.getPrice(), pr.getQty() - p.getQty(), p.getCategory(), p.getType()));
-        }
+        Product p = O1.getProducts();
+        Product pr = Product.findProduct(p.getID());
+        p.updateProduct(new Product(p.getName(), p.getPrice(), pr.getQty() - p.getQty(), p.getCategory(), p.getType()));
     }
 
     public String toString(){
