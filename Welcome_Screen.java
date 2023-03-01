@@ -68,7 +68,7 @@ public class Welcome_Screen extends JPanel {
 	private class Employee implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) { 
-            new Employee_Login();
+            new EmployeeLoginGUI();
             frame.dispose();
         } 
 	}
@@ -76,7 +76,7 @@ public class Welcome_Screen extends JPanel {
 	private class Customer implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {  
-            new Customer_Login();
+            new CustomerLoginGUI();
             frame.dispose();
         } 
     }
