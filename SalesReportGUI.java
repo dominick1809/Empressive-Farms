@@ -47,7 +47,7 @@ public class SalesReportGUI extends JFrame implements ActionListener {
         // For example:
         String report = "Sales Report\n\n";
         report += "Product ID\tQuantity\tTotal Sales\n";
-        report += "--------------------------------------\n";
+        report += "-----------------------------------------------\n";
         // Loop through the orders and calculate the total sales for each product
         // and add it to the report
         // For example:

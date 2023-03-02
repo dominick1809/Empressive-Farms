@@ -65,6 +65,7 @@ public class CustomerScreenGUI extends JFrame implements ActionListener {
             dispose();
         } else if (e.getSource() == btnLogout) {
             // Code to return to the welcome screen
+            JOptionPane.showMessageDialog(this, "Logout successful!");
             Welcome_Screen welcomeScreenGUI = new Welcome_Screen();
             welcomeScreenGUI.setVisible(true);
             dispose();

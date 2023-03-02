@@ -37,7 +37,7 @@ public class AddProductGUI extends JFrame implements ActionListener {
         productTable.setFillsViewportHeight(true);
 
         // Create the layout for the components
-        JPanel panel = new JPanel(new GridLayout(6, 2));
+        JPanel panel = new JPanel(new GridLayout(5, 2));
         panel.add(productIdLabel);
         panel.add(productIdTextField);
         panel.add(nameLabel);

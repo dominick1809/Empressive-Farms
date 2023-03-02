@@ -1,44 +1,47 @@
 import java.awt.*;
-import java.awt.event.*;
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 
-public class ViewProductInfoGUI extends JFrame implements ActionListener {
-    private JTable table;
-    private JButton returnButton;
-    
-    public ViewProductInfoGUI(DefaultTableModel model) {
-        // Create the table using the given model
-        table = new JTable(model);
-        
-        // Create a scroll pane to hold the table
-        JScrollPane scrollPane = new JScrollPane(table);
-        
-        // Create the return button
-        returnButton = new JButton("Return to Employee Screen");
-        returnButton.addActionListener(this);
+public class ViewProductInfoGUI extends JFrame {
 
-        // Create a panel to hold the return button
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        buttonPanel.add(returnButton);
+    private JButton btnBack;
 
-        // Add the scroll pane and button panel to the JFrame
-        add(scrollPane, BorderLayout.CENTER);
-        add(buttonPanel, BorderLayout.SOUTH);
-        
-        setTitle("View Product Information");
-        setSize(600, 400);
+    public ViewProductInfoGUI() {
+        setTitle("Product Information");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null); // Center the JFrame on the screen
+        setSize(500, 300);
+        
+        // Create the table model
+        Object[][] data = {
+            {"1", "Product A", "Type 1", "Category 1", "10.00"},
+            {"2", "Product B", "Type 1", "Category 2", "20.00"},
+            {"3", "Product C", "Type 2", "Category 1", "30.00"},
+            {"4", "Product D", "Type 2", "Category 2", "40.00"}
+        };
+        String[] columnNames = {"Product ID", "Name", "Type", "Category", "Unit Price"};
+        JTable table = new JTable(data, columnNames);
+        
+        // Add the table to a scroll pane
+        JScrollPane scrollPane = new JScrollPane(table);
+        getContentPane().add(scrollPane, BorderLayout.CENTER);
+        
+        // Create the back button
+        btnBack = new JButton("Back");
+        btnBack.addActionListener(e -> {
+            EmployeeScreenGUI employeeScreen = new EmployeeScreenGUI();
+            employeeScreen.setVisible(true);
+            dispose();
+        });
+        
+        // Add the back button to the bottom panel
+        JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        bottomPanel.add(btnBack);
+        getContentPane().add(bottomPanel, BorderLayout.SOUTH);
+        
+        // Show the window
         setVisible(true);
     }
-    
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == returnButton) {
-            // Return to the employee screen
-            new EmployeeScreenGUI();
-            dispose(); // Close the current JFrame
-        }
+
+    public static void main(String[] args) {
+        new ViewProductInfoGUI();
     }
 }

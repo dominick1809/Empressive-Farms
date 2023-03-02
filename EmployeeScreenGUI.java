@@ -2,6 +2,9 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
+
+
+
 public class EmployeeScreenGUI extends JFrame implements ActionListener {
 
     private JButton btnAddProduct, btnViewProductInfo, btnPendingOrders, btnSalesReport, btnSave, btnExit, btnLogout;
@@ -58,7 +61,7 @@ public class EmployeeScreenGUI extends JFrame implements ActionListener {
             dispose();
         } else if (e.getSource() == btnPendingOrders) {
             // Code to show pending orders screen
-            ViewOrdersGUI pendingOrdersGUI = new ViewOrdersGUI();
+            ViewPendingOrdersGUI pendingOrdersGUI = new ViewPendingOrdersGUI();
             pendingOrdersGUI.setVisible(true);
             dispose();
         } else if (e.getSource() == btnSalesReport) {
@@ -73,6 +76,7 @@ public class EmployeeScreenGUI extends JFrame implements ActionListener {
             dispose();
         } else if (e.getSource() == btnLogout) {
             // Code to return to the welcome screen
+            JOptionPane.showMessageDialog(this, "Logout successful!");
             Welcome_Screen welcomeScreenGUI = new Welcome_Screen();
             welcomeScreenGUI.setVisible(true);
             dispose();
