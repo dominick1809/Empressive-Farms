@@ -58,7 +58,7 @@ public class AvailableGoodsGUI extends JFrame {
      */
     private Object[][] readDataFromFile(String fileName) {
         Object[][] data = null;
-        try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
+        try (BufferedReader br = new BufferedReader(new FileReader("AddProductData.txt"))) {
             // Get the number of lines in the file
             int numLines = 0;
             while (br.readLine() != null) {
@@ -70,14 +70,16 @@ public class AvailableGoodsGUI extends JFrame {
         
             // Read each line of the file and store the data in the array
             br.close();
-            BufferedReader br2 = new BufferedReader(new FileReader(fileName));
+            BufferedReader br2 = new BufferedReader(new FileReader("AddProductData.txt"));
             String line;
             int i = 0;
             while ((line = br2.readLine()) != null) {
                 String[] fields = line.split(",");
                 if (fields.length == 5) { // check that the line has 5 fields
-                    // Store the unit price as a double
-                    data[i][4] = Double.parseDouble(fields[4]);
+                    // Check that the unit price is not empty before storing it as a double
+                    if (!fields[4].isEmpty()) {
+                        data[i][4] = Double.parseDouble(fields[4]);
+                    }
                     for (int j = 0; j < fields.length; j++) {
                         data[i][j] = fields[j];
                     }
@@ -91,6 +93,7 @@ public class AvailableGoodsGUI extends JFrame {
         }
         return data;
     }
+    
 
     private List<String> readProductNamesFromFile(String fileName) {
         List<String> productNames = new ArrayList<>();
@@ -115,9 +118,11 @@ public class AvailableGoodsGUI extends JFrame {
     
     
     // Define the getUnitPrice method to retrieve the unit price for a given row index
-    public static double getUnitPrice(int rowIndex) {
+    public double getUnitPrice(int rowIndex) {
+        Object[][] data = readDataFromFile("AddProductData.txt");
         return (double) data[rowIndex][4];
     }
+    
 
     public static void main(String[] args) {
         new AvailableGoodsGUI();

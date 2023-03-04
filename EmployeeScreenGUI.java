@@ -8,7 +8,7 @@ import java.awt.Color;
 
 public class EmployeeScreenGUI extends JFrame implements ActionListener {
 
-    private JButton btnAddProduct, btnViewProductInfo, btnPendingOrders, btnSalesReport, btnExit, btnLogout;
+    private JButton btnAddProduct, btnViewProductInfo, btnPendingOrders, btnUpdateProductInfo, btnSalesReport, btnExit, btnLogout;
 
     public EmployeeScreenGUI() {
         setTitle("Employee Screen");
@@ -18,6 +18,7 @@ public class EmployeeScreenGUI extends JFrame implements ActionListener {
         // Create the buttons
         btnAddProduct = new JButton("Add New Product");
         btnViewProductInfo = new JButton("View Product Info");
+        btnUpdateProductInfo = new JButton("Update Product Info");
         btnPendingOrders = new JButton("Pending Orders");
         btnSalesReport = new JButton("Sales Report");
         btnExit = new JButton("Exit");
@@ -26,6 +27,7 @@ public class EmployeeScreenGUI extends JFrame implements ActionListener {
         // Add action listeners to the buttons
         btnAddProduct.addActionListener(this);
         btnViewProductInfo.addActionListener(this);
+        btnUpdateProductInfo.addActionListener(this);
         btnPendingOrders.addActionListener(this);
         btnSalesReport.addActionListener(this);
         btnExit.addActionListener(this);
@@ -35,6 +37,7 @@ public class EmployeeScreenGUI extends JFrame implements ActionListener {
         JPanel panel = new JPanel(new GridLayout(4, 4));
         panel.add(btnAddProduct);
         panel.add(btnViewProductInfo);
+        panel.add(btnUpdateProductInfo);
         panel.add(btnPendingOrders);
         panel.add(btnSalesReport);
         panel.add(btnExit);
@@ -46,6 +49,7 @@ public class EmployeeScreenGUI extends JFrame implements ActionListener {
         panel.setBackground(Color.YELLOW);
         btnAddProduct.setBackground(Color.GRAY);
         btnViewProductInfo.setBackground(Color.GRAY);
+        btnUpdateProductInfo.setBackground(Color.GRAY);
         btnSalesReport.setBackground(Color.GRAY);
         btnPendingOrders.setBackground(Color.GRAY);
         btnExit.setBackground(Color.GRAY);
@@ -65,7 +69,12 @@ public class EmployeeScreenGUI extends JFrame implements ActionListener {
             ViewProductInfoGUI productInfoGUI = new ViewProductInfoGUI();
             productInfoGUI.setVisible(true);
             dispose();
-        } else if (e.getSource() == btnPendingOrders) {
+        } else if (e.getSource() == btnUpdateProductInfo) {
+            // Code to show update product info screen
+            UpdateProductInfoGUI updateProductInfoGUI = new UpdateProductInfoGUI();
+            updateProductInfoGUI.setVisible(true);
+            dispose();
+        }else if (e.getSource() == btnPendingOrders) {
             // Code to show pending orders screen
             ViewPendingOrdersGUI pendingOrdersGUI = new ViewPendingOrdersGUI();
             pendingOrdersGUI.setVisible(true);
@@ -75,7 +84,7 @@ public class EmployeeScreenGUI extends JFrame implements ActionListener {
             SalesReportGUI salesReportGUI = new SalesReportGUI();
             salesReportGUI.setVisible(true);
             dispose();
-        } else if (e.getSource() == btnExit) {
+        } else if (e.getSource() == btnExit) { 
             // Code to exit the GUI frame
             dispose();
         } else if (e.getSource() == btnLogout) {

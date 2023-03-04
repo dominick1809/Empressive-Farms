@@ -1,4 +1,5 @@
 public class Order {
+    private int orderNumber;
     private int productId;
     private int quantity;
     private double totalPrice;
@@ -7,6 +8,16 @@ public class Order {
     public Order(int productId, int quantity) {
         this.productId = productId;
         this.quantity = quantity;
+        AvailableGoodsGUI availableGoodsGUI = new AvailableGoodsGUI();
+        this.totalPrice = availableGoodsGUI.getUnitPrice(productId);
+    }
+
+    public int getOrderNumber() {
+        return orderNumber;
+    }
+
+    public void setOrderNumber(int orderNumber) {
+        this.orderNumber = orderNumber;
     }
 
     public int getProductId() {
@@ -41,10 +52,11 @@ public class Order {
         this.productName = productName;
     }
 
-
-
-    AvailableGoodsGUI availableGoodsGUI = new AvailableGoodsGUI();
-    double unitPrice = availableGoodsGUI.getUnitPrice(productId);
+    public void calculateTotalPrice() {
+        AvailableGoodsGUI availableGoodsGUI = new AvailableGoodsGUI();
+        double unitPrice = availableGoodsGUI.getUnitPrice(productId);
+        totalPrice = unitPrice * quantity;
+    }
 }
 
     
