@@ -40,6 +40,7 @@ public class ViewProductInfoGUI extends JFrame {
         getContentPane().add(bottomPanel, BorderLayout.SOUTH);
         
         // Show the window
+        btnBack.setBackground(Color.GRAY);
         setVisible(true);
     }
 
@@ -55,10 +56,10 @@ public class ViewProductInfoGUI extends JFrame {
             while (br.readLine() != null) {
                 numLines++;
             }
-    
+        
             // Initialize the data array with the number of lines and 5 columns
             data = new Object[numLines][5];
-    
+        
             // Read each line of the file and store the data in the array
             br.close();
             BufferedReader br2 = new BufferedReader(new FileReader(fileName));
@@ -66,15 +67,19 @@ public class ViewProductInfoGUI extends JFrame {
             int i = 0;
             while ((line = br2.readLine()) != null) {
                 String[] fields = line.split(",");
-                for (int j = 0; j < fields.length; j++) {
-                    data[i][j] = fields[j];
+                if (fields.length == 5) { // check that the line has 5 fields
+                    for (int j = 0; j < fields.length; j++) {
+                        data[i][j] = fields[j];
+                    }
+                    i++;
                 }
-                i++;
             }
+            
             br2.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
         return data;
     }
+    
 }

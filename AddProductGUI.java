@@ -1,5 +1,4 @@
 import java.awt.*;
-import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.BorderLayout;
@@ -23,8 +22,7 @@ public class AddProductGUI extends JFrame implements ActionListener {
     private JButton addButton, saveButton, returnButton;
     private JTable productTable;
     private DefaultTableModel tableModel;
-    private AddProduct addProduct; // instance of AddProduct class
-
+    
     public AddProductGUI() {
         // Set up the GUI components
         JLabel productIdLabel = new JLabel("Product ID:");
@@ -112,8 +110,8 @@ public class AddProductGUI extends JFrame implements ActionListener {
             nameTextField.setText(",");
             typeTextField.setText(",");
             categoryTextField.setText(",");
-            priceTextField.setText(",$");
-            
+            priceTextField.setText("");
+        
         } else if (e.getSource() == saveButton) {
             // Create a file chooser dialog
             JFileChooser fileChooser = new JFileChooser();

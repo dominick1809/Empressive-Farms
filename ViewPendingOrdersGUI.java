@@ -1,53 +1,101 @@
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
-public class ViewPendingOrdersGUI extends JFrame implements ActionListener {
-    
-    private JButton btnReturn;
-    private JTable tblOrders;
-    
+public class ViewPendingOrdersGUI extends JFrame {
+
+    private JTable table;
+    private DefaultTableModel tableModel;
+    private List<Order> orders;
+
     public ViewPendingOrdersGUI() {
         setTitle("View Pending Orders");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(400, 300);
-        
-        // Create the return button
-        btnReturn = new JButton("Return to Employee Screen");
-        btnReturn.addActionListener(this);
-        
-        // Create the orders table
-        tblOrders = new JTable();
-        String[] columnNames = {"Order ID", "Product ID", "Product Name", "Quantity", "Unit Price", "Total Price"};
-        DefaultTableModel model = new DefaultTableModel(columnNames, 0);
-        // TODO: Add code to retrieve and populate the table data 
-        tblOrders.setModel(model);
-        JScrollPane scrollPane = new JScrollPane(tblOrders);
-        
-        // Create a panel to hold the return button and the orders table
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.add(btnReturn, BorderLayout.NORTH);
-        panel.add(scrollPane, BorderLayout.CENTER);
-        
-        // Add the panel to the frame
-        add(panel);
-        panel.setBackground(Color.YELLOW);
+        setSize(800, 300);
+
+        // Create a table to display the orders
+        tableModel = new DefaultTableModel(new String[] { "Product Name", "Product ID", "Quantity", "Total Price" }, 0);
+        table = new JTable(tableModel);
+        JScrollPane scrollPane = new JScrollPane(table);
+
+        // Load the orders from the file
+        orders = loadOrdersFromFile();
+
+        // Add the orders to the table
+        for (Order order : orders) {
+            String[] row = new String[] { order.getProductName(), String.valueOf(order.getProductId()),
+                    String.valueOf(order.getQuantity()), String.format("%.2f", order.getTotalPrice()) };
+            tableModel.addRow(row);
+        }
+
+        // Add the table to the frame
+        JPanel mainPanel = new JPanel(new BorderLayout());
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        mainPanel.add(scrollPane, BorderLayout.CENTER);
+
+        // Add the return button to the north of the panel
+        JButton returnButton = new JButton("Return to the Employee Screen");
+        returnButton.setForeground(Color.BLACK);
+        returnButton.setBackground(Color.GRAY);
+        returnButton.setPreferredSize(new Dimension(80, 30));
+        returnButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+                EmployeeScreenGUI employeeScreenGUI = new EmployeeScreenGUI();
+                employeeScreenGUI.setVisible(true);
+            }
+        });
+        mainPanel.add(returnButton, BorderLayout.NORTH);
+
+        add(mainPanel);
         setVisible(true);
     }
-    
 
-    public void actionPerformed(ActionEvent e) {
-        // Handle button clicks
-        if (e.getSource() == btnReturn) {
-            // Code to return to the customer screen
-            dispose();
-            EmployeeScreenGUI employeeScreenGUI = new EmployeeScreenGUI();
-            employeeScreenGUI.setVisible(true);
+    private List<Order> loadOrdersFromFile() {
+        List<Order> orders = new ArrayList<>();
+
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader("Orders.txt"));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] tokens = line.split(",");
+                if (tokens.length == 4) {
+                    String productName = tokens[0];
+                    int productId = Integer.parseInt(tokens[1]);
+                    int quantity = Integer.parseInt(tokens[2]);
+                    double totalPrice = Double.parseDouble(tokens[3]);
+                    Order order = new Order(productId, quantity);
+                    order.setTotalPrice(totalPrice);
+                    order.setProductName(productName);
+                    orders.add(order);
+                }
+            }
+            reader.close();
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "Error loading orders");
         }
+
+        return orders;
     }
 
     public static void main(String[] args) {
-        new ViewPendingOrdersGUI();
+        ViewPendingOrdersGUI viewPendingOrdersGUI = new ViewPendingOrdersGUI();
     }
 }

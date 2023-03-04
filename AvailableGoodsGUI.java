@@ -2,11 +2,14 @@ import java.awt.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.*;
 
 public class AvailableGoodsGUI extends JFrame {
 
     private JButton btnBack;
+    private Object[][] data;
 
     public AvailableGoodsGUI() 
     {
@@ -16,13 +19,14 @@ public class AvailableGoodsGUI extends JFrame {
         getContentPane().setBackground(Color.CYAN); //set background color
     
         // Read data from text file and store it in a two-dimensional array
-        Object[][] data = readDataFromFile("AddProductData.txt");
+        data = readDataFromFile("AddProductData.txt");
 
         // Define column names
         String[] columnNames = {"Product ID", "Name", "Type", "Category", "Unit Price"};
 
         // Create the table with the data and column names
         JTable table = new JTable(data, columnNames);
+        
     
         // Add the table to a scroll pane
         JScrollPane scrollPane = new JScrollPane(table);
@@ -60,10 +64,10 @@ public class AvailableGoodsGUI extends JFrame {
             while (br.readLine() != null) {
                 numLines++;
             }
-    
+        
             // Initialize the data array with the number of lines and 5 columns
             data = new Object[numLines][5];
-    
+        
             // Read each line of the file and store the data in the array
             br.close();
             BufferedReader br2 = new BufferedReader(new FileReader(fileName));
@@ -71,19 +75,49 @@ public class AvailableGoodsGUI extends JFrame {
             int i = 0;
             while ((line = br2.readLine()) != null) {
                 String[] fields = line.split(",");
-                for (int j = 0; j < fields.length; j++) {
-                    data[i][j] = fields[j];
+                if (fields.length == 5) { // check that the line has 5 fields
+                    // Store the unit price as a double
+                    data[i][4] = Double.parseDouble(fields[4]);
+                    for (int j = 0; j < fields.length; j++) {
+                        data[i][j] = fields[j];
+                    }
+                    i++;
                 }
-                i++;
             }
+            
             br2.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
         return data;
     }
+
+    private List<String> readProductNamesFromFile(String fileName) {
+        List<String> productNames = new ArrayList<>();
+        try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] fields = line.split(",");
+                if (fields.length >= 2) { // check that the line has at least 2 fields
+                    productNames.add(fields[1]);
+                }
+            }
+            br.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return productNames;
+    }
+    
+    public List<String> getProductNames() {
+        return readProductNamesFromFile("AddProductData.txt");
+    }
     
     
+    // Define the getUnitPrice method to retrieve the unit price for a given row index
+    public static double getUnitPrice(int rowIndex) {
+        return (double) data[rowIndex][4];
+    }
 
     public static void main(String[] args) {
         new AvailableGoodsGUI();

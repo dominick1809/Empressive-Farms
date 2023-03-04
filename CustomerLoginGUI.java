@@ -4,6 +4,9 @@ import javax.swing.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.awt.Color;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 
 public class CustomerLoginGUI extends JFrame implements ActionListener {
 
@@ -40,8 +43,7 @@ public class CustomerLoginGUI extends JFrame implements ActionListener {
         panel.setBackground(Color.CYAN);
         setVisible(true);
         
-        registeredUsers = new HashMap<>();
-        registeredUsers.put("customer", "password2@");
+        registeredUsers = readRegisteredUsersFromFile("Customer.txt");
     }
 
     @Override
@@ -77,8 +79,26 @@ public class CustomerLoginGUI extends JFrame implements ActionListener {
         return false; // Invalid login
     }
     
+    private Map<String, String> readRegisteredUsersFromFile(String filename) {
+        Map<String, String> users = new HashMap<>();
+        
+        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length == 2) {
+                    users.put(parts[0], parts[1]);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        
+        return users;
+    }
 
     public static void main(String[] args) {
         new CustomerLoginGUI();
     }
 }
+

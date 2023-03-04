@@ -1,1 +1,3 @@
-2,	Chicken,	Special,	Livestock,	$1500	
+					
+2,	Chicken,	Organic,	Livestock,	350	
+420,	Medical Cannabis,	Special,	Agro,	2500	

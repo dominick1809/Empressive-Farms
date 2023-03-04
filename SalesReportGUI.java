@@ -1,48 +1,58 @@
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
+import java.awt.BorderLayout;
+import java.awt.EventQueue;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 
-public class SalesReportGUI extends JFrame implements ActionListener {
-
-    private JButton btnGenerateReport;
-    private JTextArea txtReport;
-
-    public SalesReportGUI() {
-        setTitle("Sales Report");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(400, 300);
-
-        // Create the button and add an action listener to it
-        btnGenerateReport = new JButton("Generate Report");
-        btnGenerateReport.addActionListener(this);
-
-        // Create the text area
-        txtReport = new JTextArea();
-
-        // Create a panel to hold the controls
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.add(btnGenerateReport, BorderLayout.NORTH);
-        panel.add(new JScrollPane(txtReport), BorderLayout.CENTER);
-
-        // Add the panel to the frame
-        add(panel);
-        setVisible(true);
-    }
-
-    public void actionPerformed(ActionEvent e) {
-        // Handle button clicks
-        if (e.getSource() == btnGenerateReport) {
-            GenerateSalesReport report = new GenerateSalesReport(PlaceOrderGUI.getOrders());
-
-            // Generate the report and display it in the text area
-            String report = salesReport.generateReport();
-            txtReport.setText(report);
-
-    }
-
+public class SalesReportGUI {
     
+    private JFrame frame;
+    private JTextArea reportTextArea;
 
     public static void main(String[] args) {
-        new SalesReportGUI();
+        EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                try {
+                    SalesReportGUI window = new SalesReportGUI();
+                    window.frame.setVisible(true);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
+
+    public SalesReportGUI() {
+        initialize();
+        generateReport();
+    }
+
+    private void initialize() {
+        frame = new JFrame();
+        frame.setBounds(100, 100, 800, 600);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        
+        JPanel contentPane = new JPanel();
+        contentPane.setLayout(new BorderLayout(0, 0));
+        frame.setContentPane(contentPane);
+        
+        JScrollPane scrollPane = new JScrollPane();
+        contentPane.add(scrollPane, BorderLayout.CENTER);
+        
+        reportTextArea = new JTextArea();
+        reportTextArea.setEditable(false);
+        scrollPane.setViewportView(reportTextArea);
+    }
+    
+    private void generateReport() {
+        String ordersFilePath = "Orders.txt";
+        GenerateSalesReport salesReport = new GenerateSalesReport(ordersFilePath);
+        String report = salesReport.generateReport();
+        reportTextArea.setText(report);
+    }
+
+    public void setVisible(boolean b) {
+    }
+
 }

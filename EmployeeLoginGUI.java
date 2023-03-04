@@ -4,6 +4,9 @@ import javax.swing.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.awt.Color;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 
 public class EmployeeLoginGUI extends JFrame implements ActionListener {
 
@@ -21,11 +24,7 @@ public class EmployeeLoginGUI extends JFrame implements ActionListener {
         passwordTextField = new JPasswordField();
         loginButton = new JButton("Login");
         loginButton.addActionListener(this);
-        loginButton.setBackground(new Color(0, 250, 0));
-        
-        // Initialize the registered users map
-        registeredUsers = new HashMap<>();
-        registeredUsers.put("employee", "password3@");
+        loginButton.setBackground(new Color(0 ,250 ,0)); 
 
         // Create the layout for the components
         JPanel panel = new JPanel(new GridLayout(5, 3));
@@ -43,6 +42,8 @@ public class EmployeeLoginGUI extends JFrame implements ActionListener {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         panel.setBackground(Color.YELLOW);
         setVisible(true);
+        
+        registeredUsers = readRegisteredUsersFromFile("Employee.txt");
     }
 
     @Override
@@ -54,10 +55,9 @@ public class EmployeeLoginGUI extends JFrame implements ActionListener {
         // Check if the username and password are valid
         if (isValidLogin(username, password)) {
             JOptionPane.showMessageDialog(this, "Login successful!");
-            // Display the employee screen GUI
-            EmployeeScreenGUI employeeGUI = new EmployeeScreenGUI();
-            employeeGUI.setVisible(true);
-            dispose(); // Close the login GUI
+            EmployeeScreenGUI employeeScreenGUI = new EmployeeScreenGUI();
+            employeeScreenGUI.setVisible(true);
+            dispose();
         } else {
             JOptionPane.showMessageDialog(this, "Invalid username or password.");
         }
@@ -65,15 +65,36 @@ public class EmployeeLoginGUI extends JFrame implements ActionListener {
 
     private boolean isValidLogin(String username, String password) {
         // Check if the username exists in the registered users map
-        if (registeredUsers.containsKey(username)) {
+        if (registeredUsers.containsKey(username)) 
+        {
             // Get the corresponding password for the username
             String storedPassword = registeredUsers.get(username);
+    
             // Check if the provided password matches the stored password for the username
             if (password.equals(storedPassword)) {
                 return true; // Valid login
             }
         }
+    
         return false; // Invalid login
+    }
+    
+    private Map<String, String> readRegisteredUsersFromFile(String filename) {
+        Map<String, String> users = new HashMap<>();
+        
+        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length == 2) {
+                    users.put(parts[0], parts[1]);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        
+        return users;
     }
 
     public static void main(String[] args) {
