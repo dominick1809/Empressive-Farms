@@ -121,7 +121,7 @@ public class AddProductGUI extends JFrame implements ActionListener {
                 File file = fileChooser.getSelectedFile();
                 try {
                     // Write the data in the table to the selected file
-                    BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+                    BufferedWriter writer = new BufferedWriter(new FileWriter("AddProductData.txt"));
                     for (int i = 0; i < tableModel.getRowCount(); i++) {
                         for (int j = 0; j < tableModel.getColumnCount(); j++) {
                             writer.write(tableModel.getValueAt(i, j).toString() + "\t");

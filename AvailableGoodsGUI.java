@@ -7,6 +7,7 @@ import java.util.List;
 import javax.swing.*;
 
 public class AvailableGoodsGUI extends JFrame {
+    
 
     private JButton btnBack;
     private Object[][] data;
