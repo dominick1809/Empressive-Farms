@@ -10,12 +10,13 @@ import java.util.List;
 public class PlaceOrderGUI extends JFrame implements ActionListener {
 
     private JButton btnPlaceOrder, btnBack;
-    private JTextField txtProductID, txtQuantity;
-    private JLabel lblProductID, lblQuantity;
+    private JTextField txtProductID, txtQuantity, txtUnitPrice;
+    private JLabel lblProductID, lblQuantity, lblUnitPrice;
     private JComboBox<String> cmbProductNames;
     private DefaultComboBoxModel<String> productNameModel;
     private Order order;  // instance of Order class
     private ArrayList<Order> orders = new ArrayList<Order>();  // orders list
+    private int orderNumber = 0;
 
     public PlaceOrderGUI() {
 
@@ -36,19 +37,23 @@ public class PlaceOrderGUI extends JFrame implements ActionListener {
         txtProductID = new JTextField(10);
         lblQuantity = new JLabel("Quantity:");
         txtQuantity = new JTextField(10);
+        lblUnitPrice = new JLabel("Unit Price:");
+        txtUnitPrice = new JTextField(10);
 
         // Create the product name combo box
         productNameModel = new DefaultComboBoxModel<String>();
         cmbProductNames = new JComboBox<String>(productNameModel);
 
         // Create a panel to hold the controls
-        JPanel panel = new JPanel(new GridLayout(5, 2));
+        JPanel panel = new JPanel(new GridLayout(6, 2));
         panel.add(new JLabel("Product Name:"));
         panel.add(cmbProductNames);
         panel.add(lblProductID);
         panel.add(txtProductID);
         panel.add(lblQuantity);
         panel.add(txtQuantity);
+        panel.add(lblUnitPrice);
+        panel.add(txtUnitPrice);
         panel.add(btnPlaceOrder);
         panel.add(btnBack);
 
@@ -71,56 +76,42 @@ public class PlaceOrderGUI extends JFrame implements ActionListener {
     }
 
     public void actionPerformed(ActionEvent e) {
-        // Handle button clicks
         if (e.getSource() == btnPlaceOrder) {
-            // Code to place the order
-
-            if (cmbProductNames.getSelectedItem() != null) {
-                String productName = cmbProductNames.getSelectedItem().toString();
-                int productId = Integer.parseInt(txtProductID.getText());
-                int quantity = Integer.parseInt(txtQuantity.getText());
-
-                // Get the unit price and calculate the total price
-
-                AvailableGoodsGUI availableGoodsGUI = new AvailableGoodsGUI();
-                double unitPrice = availableGoodsGUI.getUnitPrice(productId);
-                double totalPrice = unitPrice * quantity;
-
-                // Create an order object and add it to the orders list
-                Order order = new Order(productId, quantity);
-                order.setTotalPrice(totalPrice);
-                order.setProductName(productName); // set the productName field
-
-                orders.add(order);
-
-                // Save the orders to a text file
-                try {
-                    FileWriter writer = new FileWriter("Orders.txt", true);
-                    writer.write(order.getOrderNumber() + "," + productId + "," + order.getProductName() + ","
-                        + order.getQuantity() + "," + order.getTotalPrice() + "\n");
-
-                    writer.close();
-                    JOptionPane.showMessageDialog(null, "Order placed successfully. Your Total Price is: $"+ totalPrice);
-                } catch (IOException ex)
- {
-                    JOptionPane.showMessageDialog(null, "Error placing order");
-                }
+            int productId = Integer.parseInt(txtProductID.getText());
+            double unitPrice = Double.parseDouble(txtUnitPrice.getText());
+            int quantity = Integer.parseInt(txtQuantity.getText());
+            double totalPrice = unitPrice * quantity;
+    
+            // Generate order number
+            int orderNumber = orders.size() + 1;
+    
+            // Create the order object
+            Order order = new Order(orderNumber, productId);
+    
+            // Add the order to the list
+            orders.add(order);
+    
+            // Save the order to a file
+            try {
+                FileWriter writer = new FileWriter("Orders.txt", true);
+                writer.write(order.toString() + "\n");
+                writer.close();
+    
+                JOptionPane.showMessageDialog(this, "Order placed successfully. Total price: $" + totalPrice);
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(this, "Error placing order.");
             }
-                          
-        }else if (e.getSource() == btnBack) {
-            CustomerScreenGUI customerScreenGUI = new CustomerScreenGUI();
-            customerScreenGUI.setVisible(true);
+    
+            // Clear the input fields
+            txtProductID.setText("");
+            txtUnitPrice.setText("");
+            txtQuantity.setText("");
+    
+        } else if (e.getSource() == btnBack) {
+            CustomerScreenGUI customerScreen = new CustomerScreenGUI();
+            customerScreen.setVisible(true);
             dispose();
         }
     }
-    
-    
-
-    public static void main(String[] args) {
-        PlaceOrderGUI placeOrderGUI = new PlaceOrderGUI();
-        placeOrderGUI.setVisible(true);
-    }
-    
 }
-
-
+    
