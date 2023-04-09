@@ -1,101 +1,131 @@
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
+import javax.swing.*;
 
 public class ViewPendingOrdersGUI extends JFrame {
+    
 
-    private JTable table;
-    private DefaultTableModel tableModel;
-    private List<Order> orders;
+    private JButton btnBack;
+    private Object[][] data;
 
-    public ViewPendingOrdersGUI() {
-        setTitle("View Pending Orders");
+    public ViewPendingOrdersGUI() 
+    {
+        setTitle("Orders");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(800, 300);
+        setSize(500, 300);
+        getContentPane().setBackground(Color.CYAN); //set background color
+    
+        // Read data from text file and store it in a two-dimensional array
+        data = readDataFromFile("Orders.txt");
 
-        // Create a table to display the orders
-        tableModel = new DefaultTableModel(new String[] { "Product Name", "Product ID", "Quantity", "Total Price" }, 0);
-        table = new JTable(tableModel);
+        // Define column names
+        String[] columnNames = {"Order #", "Product ID", "Product Name", "Quantity", "Unit Price", "Total Price"};
+
+        // Create the table with the data and column names
+        JTable table = new JTable(data, columnNames);
+        
+    
+        // Add the table to a scroll pane
         JScrollPane scrollPane = new JScrollPane(table);
-
-        // Load the orders from the file
-        orders = loadOrdersFromFile();
-
-        // Add the orders to the table
-        for (Order order : orders) {
-            String[] row = new String[] { order.getProductName(), String.valueOf(order.getProductId()),
-                    String.valueOf(order.getQuantity()), String.format("%.2f", order.getTotalPrice()) };
-            tableModel.addRow(row);
-        }
-
-        // Add the table to the frame
-        JPanel mainPanel = new JPanel(new BorderLayout());
-        mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        mainPanel.add(scrollPane, BorderLayout.CENTER);
-
-        // Add the return button to the north of the panel
-        JButton returnButton = new JButton("Return to the Employee Screen");
-        returnButton.setForeground(Color.BLACK);
-        returnButton.setBackground(Color.GRAY);
-        returnButton.setPreferredSize(new Dimension(80, 30));
-        returnButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                dispose();
-                EmployeeScreenGUI employeeScreenGUI = new EmployeeScreenGUI();
-                employeeScreenGUI.setVisible(true);
-            }
+        getContentPane().add(scrollPane, BorderLayout.CENTER);
+    
+        // Create the back button
+        btnBack = new JButton("Back");
+        btnBack.addActionListener(e -> {
+            EmployeeScreenGUI employeeScreen = new EmployeeScreenGUI();
+            employeeScreen.setVisible(true);
+            dispose();
         });
-        mainPanel.add(returnButton, BorderLayout.NORTH);
-
-        add(mainPanel);
+    
+        // Add the back button to the bottom panel
+        JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        bottomPanel.add(btnBack);
+        getContentPane().add(bottomPanel, BorderLayout.SOUTH);
+    
+        // Show the window
         setVisible(true);
+
+        btnBack.setBackground(Color.GRAY);
     }
 
-    private List<Order> loadOrdersFromFile() {
-        List<Order> orders = new ArrayList<>();
-
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader("Orders.txt"));
+    /**
+     * Reads data from a text file and returns a two-dimensional array
+     * @param fileName the name of the file to read from
+     * @return a two-dimensional array containing the data read from the file
+     */
+    private Object[][] readDataFromFile(String fileName) {
+        Object[][] data = null;
+        try (BufferedReader br = new BufferedReader(new FileReader("Orders.txt"))) {
+            // Get the number of lines in the file
+            int numLines = 0;
+            while (br.readLine() != null) {
+                numLines++;
+            }
+        
+            // Initialize the data array with the number of lines and 6 columns
+            data = new Object[numLines][6];
+        
+            // Read each line of the file and store the data in the array
+            br.close();
+            BufferedReader br2 = new BufferedReader(new FileReader("Orders.txt"));
             String line;
-            while ((line = reader.readLine()) != null) {
-                String[] tokens = line.split(",");
-                if (tokens.length == 4) {
-                    String productName = tokens[0];
-                    int productId = Integer.parseInt(tokens[1]);
-                    int quantity = Integer.parseInt(tokens[2]);
-                    double totalPrice = Double.parseDouble(tokens[3]);
-                    Order order = new Order(productId, quantity);
-                    order.setTotalPrice(totalPrice);
-                    order.setProductName(productName);
-                    orders.add(order);
+            int i = 0;
+            while ((line = br2.readLine()) != null) {
+                String[] fields = line.split(",");
+                if (fields.length == 6) { // check that the line has 6 fields
+                    // Check that the unit price is not empty before storing it as a double
+                    if (!fields[4].isEmpty()) {
+                        data[i][4] = Double.parseDouble(fields[4]);
+                    }
+                    for (int j = 0; j < fields.length; j++) {
+                        data[i][j] = fields[j];
+                    }
+                    i++;
                 }
             }
-            reader.close();
+            
+            br2.close();
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(null, "Error loading orders");
+            e.printStackTrace();
         }
-
-        return orders;
+        return data;
     }
+    
+
+    private List<String> readProductNamesFromFile(String fileName) {
+        List<String> productNames = new ArrayList<>();
+        try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] fields = line.split(",");
+                if (fields.length >= 2) { // check that the line has at least 2 fields
+                    productNames.add(fields[1]);
+                }
+            }
+            br.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return productNames;
+    }
+    
+    public List<String> getProductNames() {
+        return readProductNamesFromFile("Orders.txt");
+    }
+    
+    
+    // Define the getUnitPrice method to retrieve the unit price for a given row index
+    public double getUnitPrice(int rowIndex) {
+        Object[][] data = readDataFromFile("Orders.txt");
+        return (double) data[rowIndex][5];
+    }
+    
 
     public static void main(String[] args) {
-        ViewPendingOrdersGUI viewPendingOrdersGUI = new ViewPendingOrdersGUI();
+        new ViewPendingOrdersGUI();
     }
 }
