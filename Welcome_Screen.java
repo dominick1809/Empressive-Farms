@@ -95,8 +95,7 @@ public class Welcome_Screen extends JPanel {
         @Override
         public void actionPerformed(ActionEvent e) {  
             new CustomerLoginGUI();
-            frame.dispose();
-        } 
+            frame.dispose();        } 
     }
 
     private class CreateEmployee implements ActionListener {

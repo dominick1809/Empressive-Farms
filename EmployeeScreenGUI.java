@@ -81,7 +81,7 @@ public class EmployeeScreenGUI extends JFrame implements ActionListener {
             dispose();
         } else if (e.getSource() == btnSalesReport) {
             // Code to generate sales report
-            SalesReportGUI salesReportGUI = new SalesReportGUI();
+            GenerateSalesReport salesReportGUI = new GenerateSalesReport();
             salesReportGUI.setVisible(true);
             dispose();
         } else if (e.getSource() == btnExit) { 

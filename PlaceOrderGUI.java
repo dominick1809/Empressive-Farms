@@ -1,117 +1,104 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.PrintWriter;
+import java.util.Random;
 
-public class PlaceOrderGUI extends JFrame implements ActionListener {
-
-    private JButton btnPlaceOrder, btnBack;
-    private JTextField txtProductID, txtQuantity, txtUnitPrice;
-    private JLabel lblProductID, lblQuantity, lblUnitPrice;
-    private JComboBox<String> cmbProductNames;
-    private DefaultComboBoxModel<String> productNameModel;
-    private Order order;  // instance of Order class
-    private ArrayList<Order> orders = new ArrayList<Order>();  // orders list
-    private int orderNumber = 0;
+public class PlaceOrderGUI {
+    private JFrame frame;
+    private JTextField productIdField;
+    private JTextField productNameField;
+    private JTextField quantityField;
+    private JTextField priceField;
+    private JLabel totalLabel;
+    private JButton placeOrderButton;
+    private JLabel orderNumberLabel;
+    private JButton returnButton; // Added return button
 
     public PlaceOrderGUI() {
+        frame = new JFrame("Place Order");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(400, 300);
+        frame.setLayout(new GridLayout(8, 2)); // Updated layout to accommodate return button
 
-        setTitle("Place Order");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(400, 300);
+        productIdField = new JTextField();
+        productNameField = new JTextField();
+        quantityField = new JTextField();
+        priceField = new JTextField();
+        totalLabel = new JLabel("Total:");
+        orderNumberLabel = new JLabel("");
+        returnButton = new JButton("Return to Customer Screen"); // Added return button
 
-        // Create the buttons
-        btnPlaceOrder = new JButton("Place Order");
-        btnBack = new JButton("Back");
+        placeOrderButton = new JButton("Place Order");
+        placeOrderButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String productId = productIdField.getText();
+                String productName = productNameField.getText();
+                int quantity = Integer.parseInt(quantityField.getText());
+                double price = Double.parseDouble(priceField.getText());
+                double total = quantity * price;
+                totalLabel.setText("Total: " + total);
 
-        // Add action listeners to the buttons
-        btnPlaceOrder.addActionListener(this);
-        btnBack.addActionListener(this);
+                // Generate a random order number
+                Random random = new Random();
+                int orderNumber = random.nextInt(100000);
+                orderNumberLabel.setText("Order Number: " + orderNumber);
 
-        // Create the labels and text fields
-        lblProductID = new JLabel("Product ID:");
-        txtProductID = new JTextField(10);
-        lblQuantity = new JLabel("Quantity:");
-        txtQuantity = new JTextField(10);
-        lblUnitPrice = new JLabel("Unit Price:");
-        txtUnitPrice = new JTextField(10);
+                // Save the order in the text file
+                String orderData = orderNumber + "," + productId + "," + productName + "," + quantity + "," + price + "," + total;
+                saveOrderToFile(orderData);
+            }
+        });
 
-        // Create the product name combo box
-        productNameModel = new DefaultComboBoxModel<String>();
-        cmbProductNames = new JComboBox<String>(productNameModel);
+        returnButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                frame.dispose(); // Close the current frame
+                new CustomerScreenGUI(); // Open the customer screen GUI
+            }
+        });
 
-        // Create a panel to hold the controls
-        JPanel panel = new JPanel(new GridLayout(6, 2));
-        panel.add(new JLabel("Product Name:"));
-        panel.add(cmbProductNames);
-        panel.add(lblProductID);
-        panel.add(txtProductID);
-        panel.add(lblQuantity);
-        panel.add(txtQuantity);
-        panel.add(lblUnitPrice);
-        panel.add(txtUnitPrice);
-        panel.add(btnPlaceOrder);
-        panel.add(btnBack);
+        frame.add(new JLabel("Product ID:"));
+        frame.add(productIdField);
+        frame.add(new JLabel("Product Name:"));
+        frame.add(productNameField);
+        frame.add(new JLabel("Quantity:"));
+        frame.add(quantityField);
+        frame.add(new JLabel("Price:"));
+        frame.add(priceField);
+        frame.add(totalLabel);
+        frame.add(new JLabel(""));
+        frame.add(orderNumberLabel);
+        frame.add(new JLabel(""));
+        frame.add(placeOrderButton);
+        frame.add(returnButton); // Added return button
+        placeOrderButton.setBackground(Color.RED);
+        returnButton.setBackground(Color.RED);
 
-        // Add the panel to the frame
-        add(panel);
-        panel.setBackground(Color.CYAN);
-        setVisible(true);
-        btnBack.setBackground(Color.RED);
-        btnPlaceOrder.setBackground(Color.RED);
+        frame.setVisible(true);
+    }
 
-        // Initialize the Order object
-        order = new Order(0, 0);
-
-        // Load the available products into the combo box
-        AvailableGoodsGUI availableGoodsGUI = new AvailableGoodsGUI();
-        List<String> productNames = availableGoodsGUI.getProductNames();
-        for (String productName : productNames) {
-            productNameModel.addElement(productName);
+    private void saveOrderToFile(String orderData) {
+        try {
+            FileWriter fileWriter = new FileWriter("Orders.txt", true);
+            PrintWriter printWriter = new PrintWriter(fileWriter);
+            printWriter.println(orderData);
+            printWriter.close();
+            JOptionPane.showMessageDialog(frame, "Order saved successfully!");
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(frame, "Failed to save order. Please try again.");
         }
     }
 
-    public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == btnPlaceOrder) {
-            int productId = Integer.parseInt(txtProductID.getText());
-            double unitPrice = Double.parseDouble(txtUnitPrice.getText());
-            int quantity = Integer.parseInt(txtQuantity.getText());
-            double totalPrice = unitPrice * quantity;
-    
-            // Generate order number
-            int orderNumber = orders.size() + 1;
-    
-            // Create the order object
-            Order order = new Order(orderNumber, productId);
-    
-            // Add the order to the list
-            orders.add(order);
-    
-            // Save the order to a file
-            try {
-                FileWriter writer = new FileWriter("Orders.txt", true);
-                writer.write(order.toString() + "\n");
-                writer.close();
-    
-                JOptionPane.showMessageDialog(this, "Order placed successfully. Total price: $" + totalPrice);
-            } catch (IOException ex) {
-                JOptionPane.showMessageDialog(this, "Error placing order.");
-            }
-    
-            // Clear the input fields
-            txtProductID.setText("");
-            txtUnitPrice.setText("");
-            txtQuantity.setText("");
-    
-        } else if (e.getSource() == btnBack) {
-            CustomerScreenGUI customerScreen = new CustomerScreenGUI();
-            customerScreen.setVisible(true);
-            dispose();
-        }
+    public static void main(String[] args) {
+        new PlaceOrderGUI();
+    }
+
+    public void setVisible(boolean b) {
     }
 }
+
     

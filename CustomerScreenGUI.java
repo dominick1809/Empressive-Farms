@@ -5,7 +5,7 @@ import java.awt.Color;
 
 public class CustomerScreenGUI extends JFrame implements ActionListener {
 
-    private JButton btnAvailableGoods, btnPlaceOrder, btnViewOrders, btnClose, btnLogout, btnEditDeleteOrder; // Added btnEditDeleteOrder
+    private JButton btnAvailableGoods, btnPlaceOrder, btnViewOrders, btnClose, btnLogout, btnEditOrder, btnDeleteOrder; // Added btnEditDeleteOrder
 
     public CustomerScreenGUI() {
         setTitle("Customer Screen");
@@ -16,7 +16,8 @@ public class CustomerScreenGUI extends JFrame implements ActionListener {
         btnAvailableGoods = new JButton("Available Goods");
         btnPlaceOrder = new JButton("Place Order");
         btnViewOrders = new JButton("View Orders");
-        btnEditDeleteOrder = new JButton("Edit/Delete Order"); // Added btnEditDeleteOrder
+        btnEditOrder = new JButton("Edit Order"); // Added btnEditDeleteOrder
+        btnDeleteOrder = new JButton("Delete Order");
         btnClose = new JButton("Exit");
         btnLogout = new JButton("Log Out");
         
@@ -27,14 +28,16 @@ public class CustomerScreenGUI extends JFrame implements ActionListener {
         btnViewOrders.addActionListener(this);
         btnClose.addActionListener(this);
         btnLogout.addActionListener(this);
-        btnEditDeleteOrder.addActionListener(this); // Added btnEditDeleteOrder
+        btnEditOrder.addActionListener(this); // Added btnEditDeleteOrder
+        btnDeleteOrder.addActionListener(this);
 
         // Create a panel to hold the buttons
         JPanel panel = new JPanel(new GridLayout(5, 5));
         panel.add(btnAvailableGoods);
         panel.add(btnPlaceOrder);
         panel.add(btnViewOrders);
-        panel.add(btnEditDeleteOrder); // Added btnEditDeleteOrder
+        panel.add(btnEditOrder); // Added btnEditDeleteOrder
+        panel.add(btnDeleteOrder);
         panel.add(btnClose);
         panel.add(btnLogout);
         
@@ -46,7 +49,8 @@ public class CustomerScreenGUI extends JFrame implements ActionListener {
         btnAvailableGoods.setBackground(Color.RED);
         btnPlaceOrder.setBackground(Color.RED);
         btnViewOrders.setBackground(Color.RED);
-        btnEditDeleteOrder.setBackground(Color.RED); // Added btnEditDeleteOrder
+        btnEditOrder.setBackground(Color.RED); // Added btnEditDeleteOrder
+        btnDeleteOrder.setBackground(Color.RED);
         btnClose.setBackground(Color.RED);
         btnLogout.setBackground(Color.RED);
         
@@ -69,10 +73,15 @@ public class CustomerScreenGUI extends JFrame implements ActionListener {
             ViewOrdersGUI viewordersGUI = new ViewOrdersGUI();
             viewordersGUI.setVisible(true);
             dispose();
-        } else if (e.getSource() == btnEditDeleteOrder) {
+        } else if (e.getSource() == btnEditOrder) {
             // Code to show edit/delete order screen
-            EditDeleteOrderGUI editDeleteOrderGUI = new EditDeleteOrderGUI();
-            editDeleteOrderGUI.setVisible(true);
+            EditOrderGUI editOrderGUI = new EditOrderGUI();
+            editOrderGUI.setVisible(true);
+            dispose();
+        } else if (e.getSource() == btnDeleteOrder) {
+            // Code to show edit/delete order screen
+            DeleteOrderGUI deleteOrderGUI = new DeleteOrderGUI();
+            deleteOrderGUI.setVisible(true);
             dispose();
         } else if (e.getSource() == btnClose) {
             // Code to close the GUI frame
